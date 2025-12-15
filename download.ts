@@ -1,5 +1,5 @@
-import {type ContentsReponseObject, type TreeResponseObject} from 'list-github-dir-content';
-import pRetry, {type FailedAttemptError} from 'p-retry';
+import { type ContentsReponseObject, type TreeResponseObject } from 'list-github-dir-content';
+import pRetry, { type FailedAttemptError } from 'p-retry';
 import authenticatedFetch from './authenticated-fetch.js';
 
 function escapeFilepath(path: string) {
@@ -33,7 +33,7 @@ async function fetchPublicFile({
 }: FileRequest) {
 	const response = await authenticatedFetch(
 		`https://raw.githubusercontent.com/${user}/${repository}/${reference}/${escapeFilepath(file.path)}`,
-		{signal},
+		{ signal },
 	);
 
 	if (!response.ok) {
@@ -43,7 +43,7 @@ async function fetchPublicFile({
 	const lfsCompatibleResponse = (await maybeResponseLfs(response))
 		? await authenticatedFetch(
 			`https://media.githubusercontent.com/media/${user}/${repository}/${reference}/${escapeFilepath(file.path)}`,
-			{signal},
+			{ signal },
 		)
 		: response;
 
@@ -58,14 +58,14 @@ async function fetchPrivateFile({
 	file,
 	signal,
 }: FileRequest) {
-	const response = await authenticatedFetch(file.url, {signal});
+	const response = await authenticatedFetch(file.url, { signal });
 
 	if (!response.ok) {
 		throw new Error(`HTTP ${response.statusText} for ${file.path}`);
 	}
 
 	// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-	const {content} = await response.json();
+	const { content } = await response.json();
 	const decoder = await fetch(
 		`data:application/octet-stream;base64,${content}`,
 	);
@@ -90,16 +90,16 @@ export async function downloadFile({
 	const fileRequest = {
 		user, repository, reference, file, signal,
 	};
-	const localDownload = async () =>
+	const localDownload = async () => {
 		const token = globalThis.localStorage?.getItem('token');
 		isPrivate || token
 			? fetchPrivateFile(fileRequest)
 			: fetchPublicFile(fileRequest);
-	const onFailedAttempt = (error: FailedAttemptError) => {
-		console.error(
-			`Error downloading ${file.path}. Attempt ${error.attemptNumber}. ${error.retriesLeft} retries left.`,
-		);
-	};
-
-	return pRetry(localDownload, {onFailedAttempt});
+		const onFailedAttempt = (error: FailedAttemptError) => {
+			console.error(
+				`Error downloading ${file.path}. Attempt ${error.attemptNumber}. ${error.retriesLeft} retries left.`,
+			);
+		};
+		return pRetry(localDownload, { onFailedAttempt });
+	}
 }

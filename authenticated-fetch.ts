@@ -19,6 +19,7 @@ export default async function authenticatedFetch(
 
 	switch (response.status) {
 		case 401: {
+			 globalThis.localStorage?.removeItem('token');
 			throw new Error('Invalid token');
 		}
 
