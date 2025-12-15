@@ -91,7 +91,8 @@ export async function downloadFile({
 		user, repository, reference, file, signal,
 	};
 	const localDownload = async () =>
-		isPrivate
+		const token = globalThis.localStorage?.getItem('token');
+		isPrivate || token
 			? fetchPrivateFile(fileRequest)
 			: fetchPublicFile(fileRequest);
 	const onFailedAttempt = (error: FailedAttemptError) => {
