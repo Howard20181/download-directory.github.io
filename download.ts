@@ -90,16 +90,15 @@ export async function downloadFile({
 	const fileRequest = {
 		user, repository, reference, file, signal,
 	};
-	const localDownload = async () => {
-		const token = globalThis.localStorage?.getItem('token');
+	const token = globalThis.localStorage?.getItem('token');
+	const localDownload = async () =>
 		isPrivate || token
 			? fetchPrivateFile(fileRequest)
 			: fetchPublicFile(fileRequest);
-		const onFailedAttempt = (error: FailedAttemptError) => {
-			console.error(
-				`Error downloading ${file.path}. Attempt ${error.attemptNumber}. ${error.retriesLeft} retries left.`,
-			);
-		};
-		return pRetry(localDownload, { onFailedAttempt });
-	}
+	const onFailedAttempt = (error: FailedAttemptError) => {
+		console.error(
+			`Error downloading ${file.path}. Attempt ${error.attemptNumber}. ${error.retriesLeft} retries left.`,
+		);
+	};
+	return pRetry(localDownload, { onFailedAttempt });
 }
