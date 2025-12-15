@@ -1,6 +1,6 @@
 export default async function authenticatedFetch(
 	url: string,
-	{signal, method}: {signal?: AbortSignal; method?: 'HEAD'} = {},
+	{ signal, method }: { signal?: AbortSignal; method?: 'HEAD' } = {},
 ): Promise<Response> {
 	const token = globalThis.localStorage?.getItem('token');
 
@@ -19,7 +19,7 @@ export default async function authenticatedFetch(
 
 	switch (response.status) {
 		case 401: {
-			 globalThis.localStorage?.removeItem('token');
+			globalThis.localStorage?.removeItem('token');
 			throw new Error('Invalid token');
 		}
 
