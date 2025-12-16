@@ -29,20 +29,20 @@
 	"dependencies": {
 		"jszip": "^3.10.1",
 		"list-github-dir-content": "^4.0.4",
-		"p-map": "^7.0.2",
-		"p-retry": "^6.2.0"
+		"p-map": "^7.0.4",
+		"p-retry": "^6.2.1"
 	},
 	"devDependencies": {
 		"@sindresorhus/tsconfig": "^6.0.0",
 		"buffer": "^6.0.3",
 		"npm-run-all": "^4.1.5",
-		"parcel": "^2.12.0",
+		"parcel": "^2.16.3",
 		"parcel-reporter-static-files-copy": "^1.5.3",
-		"parcel-resolver-ignore": "^2.2.0",
+		"parcel-resolver-ignore": "^2.2.1",
 		"process": "^0.11.10",
-		"typed-query-selector": "^2.11.2",
-		"typescript": "^5.5.3",
-		"vitest": "^2.0.2",
+		"typed-query-selector": "^2.12.0",
+		"typescript": "^5.9.3",
+		"vitest": "^2.1.9",
 		"xo": "^0.58.0"
 	},
 	"parcelIgnore": [
